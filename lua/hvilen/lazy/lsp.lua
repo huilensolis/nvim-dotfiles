@@ -1,8 +1,55 @@
 return {
     {
         'VonHeikemen/lsp-zero.nvim',
-        branch = 'v3.x',
-        setup = function()
+        branch = 'v4.x',
+        lazy = true,
+        config = false,
+    },
+    {
+        'williamboman/mason.nvim',
+        lazy = false,
+        config = true,
+    },
+
+    -- Autocompletion
+    {
+        'hrsh7th/nvim-cmp',
+        event = 'InsertEnter',
+        dependencies = {
+            { 'L3MON4D3/LuaSnip' },
+        },
+        config = function()
+            local cmp = require('cmp')
+
+            cmp.setup({
+                sources = {
+                    { name = 'nvim_lsp' },
+                },
+                mapping = cmp.mapping.preset.insert({
+                    ['<C-Space>'] = cmp.mapping.complete(),
+                    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+                    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+                }),
+                snippet = {
+                    expand = function(args)
+                        vim.snippet.expand(args.body)
+                    end,
+                },
+            })
+        end
+    },
+
+    -- LSP
+    {
+        'neovim/nvim-lspconfig',
+        cmd = { 'LspInfo', 'LspInstall', 'LspStart' },
+        event = { 'BufReadPre', 'BufNewFile' },
+        dependencies = {
+            { 'hrsh7th/cmp-nvim-lsp' },
+            { 'williamboman/mason.nvim' },
+            { 'williamboman/mason-lspconfig.nvim' },
+        },
+        config = function()
             local lsp_zero = require('lsp-zero')
 
             -- lsp_attach is where you enable features that only work
@@ -27,27 +74,42 @@ return {
             lsp_zero.extend_lspconfig({
                 sign_text = true,
                 lsp_attach = lsp_attach,
-                capabilities = require('cmp_nvim_lsp').default_capabilities(),
+                capabilities = require('cmp_nvim_lsp').default_capabilities()
             })
-        end
-    },
-    { 'neovim/nvim-lspconfig' },
-    {
-        'williamboman/mason.nvim',
-        config = function()
-            require('mason').setup({})
-        end
-    },
-    {
-        'williamboman/mason-lspconfig.nvim',
-        config = function()
+
+            -- don't add this function in the `lsp_attach` callback.
+            -- `format_on_save` should run only once, before the language servers are active.
+            -- lsp_zero.format_on_save({
+            --     format_opts = {
+            --         async = false,
+            --         timeout_ms = 10000,
+            --     },
+            --     servers = {
+            --         ['lua_ls'] = { 'lua' },
+            --         ['biome'] = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+            --     }
+            -- })
+
+
             require('mason-lspconfig').setup({
+                ensure_installed = { 'lua_ls', 'rust_analyzer', 'ts_ls', 'biome', 'docker_compose_language_service' },
                 handlers = {
+                    -- this first function is the "default handler"
+                    -- it applies to every language server without a "custom handler"
                     function(server_name)
                         require('lspconfig')[server_name].setup({})
                     end,
-                }
+                },
+                -- this is the "custom handler" for `example_server`
+                ts_ls = function()
+                    require('lspconfig').ts_ls.setup({
+                        ---
+                        -- in here you can add your own
+                        -- custom configuration
+                        ---
+                    })
+                end,
             })
         end
-    },
+    }
 }
