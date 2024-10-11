@@ -43,23 +43,15 @@ return {
             end
 
             lsp_zero.extend_lspconfig({
-                sign_text = true,
+                sign_text = {
+                    error = '✘',
+                    warn = '▲',
+                    hint = '⚑',
+                    info = '»',
+                },
                 lsp_attach = lsp_attach,
                 capabilities = require('cmp_nvim_lsp').default_capabilities()
             })
-
-            -- don't add this function in the `lsp_attach` callback.
-            -- `format_on_save` should run only once, before the language servers are active.
-            -- lsp_zero.format_on_save({
-            --     format_opts = {
-            --         async = false,
-            --         timeout_ms = 10000,
-            --     },
-            --     servers = {
-            --         ['lua_ls'] = { 'lua' },
-            --         ['biome'] = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
-            --     }
-            -- })
 
 
             require('mason-lspconfig').setup({
