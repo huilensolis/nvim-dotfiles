@@ -1,6 +1,10 @@
 return {
     {
         'hrsh7th/nvim-cmp',
+        event = 'InsertEnter',
+        dependencies = {
+            { 'L3MON4D3/LuaSnip' },
+        },
         config = function()
             local cmp = require('cmp')
 
@@ -12,7 +16,7 @@ return {
                 sources = {
                     { name = 'nvim_lsp' },
                     { name = 'path' },
-                    { name = 'lueasnip' }
+                    { name = 'lueasnip' },
                 },
                 mapping = cmp.mapping.preset.insert({
                     -- Navigate between completion items
@@ -24,7 +28,6 @@ return {
 
                     -- Ctrl+Space to trigger completion menu
                     ['<C-Space>'] = cmp.mapping.complete(),
-
                     -- Navigate between snippet placeholder
                     -- ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
                     -- ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
