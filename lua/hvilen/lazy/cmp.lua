@@ -6,10 +6,11 @@ return {
             'hrsh7th/cmp-nvim-lsp', -- LSP source for nvim-cmp
             'hrsh7th/cmp-buffer',   -- Buffer source for nvim-cmp
             'hrsh7th/cmp-path',     -- Path source for nvim-cmp
-            'hrsh7th/cmp-cmdline',  -- Cmdline source for nvim-cmp
+            'L3MON4D3/LuaSnip',
         },
         config = function()
             local cmp = require('cmp')
+            local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
             cmp.setup({
                 snippet = {
@@ -22,8 +23,8 @@ return {
                     autocomplete = { cmp.TriggerEvent.TextChanged },
                     completeopt = 'menu,menuone,noinsert'
                 },
-                source = {
-                    { name = 'nvim_lsp' },
+                sources = {
+                    { name = 'nvim_lsp', priority = 1000 }, -- Ensure this is prioritized
                     { name = 'path' },
                     { name = 'buffer' },
                     { name = 'luasnip' },
