@@ -20,6 +20,12 @@ return {
             { 'williamboman/mason.nvim' },
             { 'williamboman/mason-lspconfig.nvim' },
         },
+        -- settings = {
+        -- ["rust-analyzer"] = {
+        --     procMacro = { enable = true },
+        --     cargo = { allFeatures = true },
+        --     checkOnSave = { command = "clippy", extraArgs = { "--no-deps" } },
+        -- },
         config = function()
             local lsp_zero = require('lsp-zero')
 
@@ -72,6 +78,22 @@ return {
                         ---
                     })
                 end,
+                rust_analizer = function()
+                    require('lspconfig').rust_analizer.setup({
+                        on_attach = function(client, bufnr)
+                            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+                        end,
+                        capabilities = require('cmp_nvim_lsp').default_capabilities(),  -- Important for completion capabilities
+
+                        settings = {
+                            ["rust-analyzer"] = {
+                                procMacro = { enable = true },
+                                cargo = { allFeatures = true },
+                                checkOnSave = { command = "clippy", extraArgs = { "--no-deps" } },
+                            },
+                        }
+                    })
+                end
             })
         end
     }

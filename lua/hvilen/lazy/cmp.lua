@@ -1,22 +1,32 @@
 return {
     {
         'hrsh7th/nvim-cmp',
-        event = 'InsertEnter',
+        event = { 'InsertEnter' },
         dependencies = {
-            { 'L3MON4D3/LuaSnip' },
+            'hrsh7th/cmp-nvim-lsp', -- LSP source for nvim-cmp
+            'hrsh7th/cmp-buffer',   -- Buffer source for nvim-cmp
+            'hrsh7th/cmp-path',     -- Path source for nvim-cmp
+            'hrsh7th/cmp-cmdline',  -- Cmdline source for nvim-cmp
         },
         config = function()
             local cmp = require('cmp')
 
             cmp.setup({
+                snippet = {
+                    expand = function(args)
+                        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                    end,
+                },
                 preselect = "item",
                 completion = {
+                    autocomplete = { cmp.TriggerEvent.TextChanged },
                     completeopt = 'menu,menuone,noinsert'
                 },
-                sources = {
+                source = {
                     { name = 'nvim_lsp' },
                     { name = 'path' },
-                    { name = 'lueasnip' },
+                    { name = 'buffer' },
+                    { name = 'luasnip' },
                 },
                 mapping = cmp.mapping.preset.insert({
                     -- Navigate between completion items
@@ -36,12 +46,8 @@ return {
                     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
                     ['<C-d>'] = cmp.mapping.scroll_docs(4),
                 }),
-                snippet = {
-                    expand = function(args)
-                        vim.snippet.expand(args.body)
-                    end,
-                },
             })
+            print("nvim-cmp setup complete")
         end
     }
 }
