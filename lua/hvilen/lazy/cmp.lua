@@ -48,7 +48,6 @@ return {
                     ['<C-d>'] = cmp.mapping.scroll_docs(4),
                 }),
             })
-            print("nvim-cmp setup complete")
         end
     }
 }

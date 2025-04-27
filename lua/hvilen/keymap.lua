@@ -32,6 +32,9 @@ map('', '<right>', '<nop>')
 -- vertical split
 map('n', '<C-s>', vim.cmd.vs)
 
+-- see diagnosis in float window
+map('n', '<S-j>', vim.diagnostic.open_float)
+
 -- resize split windows
 -- map('n', '<S>c', function()
 --     vim.cmd("vertical resize +5")

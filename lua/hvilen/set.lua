@@ -13,6 +13,13 @@ vim.opt.smartindent = true
 
 -- wrap
 vim.opt.wrap = false
+vim.diagnostic.config({
+    virtual_text = {
+        wrap = true,
+        max_lines = 10,
+        spacing = 4,
+    },
+})
 
 -- search
 vim.opt.hlsearch = true
@@ -30,8 +37,8 @@ vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 
 -- clipboard
-vim.keymap.set('n','y','"+y')
-vim.keymap.set('n','yy','"+yy')
-vim.keymap.set('n','Y','"+Y')
-vim.keymap.set('x','y','"+y')
-vim.keymap.set('x','Y','"+Y')
+vim.keymap.set('n', 'y', '"+y')
+vim.keymap.set('n', 'yy', '"+yy')
+vim.keymap.set('n', 'Y', '"+Y')
+vim.keymap.set('x', 'y', '"+y')
+vim.keymap.set('x', 'Y', '"+Y')
